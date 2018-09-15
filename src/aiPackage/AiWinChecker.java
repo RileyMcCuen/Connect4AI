@@ -10,25 +10,6 @@ package aiPackage;
  */
 
 public class AiWinChecker {
-	private int[][] board;
-
-	/**
-	 * @param boardState - is the boardState that was passed into this class by the
-	 *                   controller class.
-	 */
-
-	public AiWinChecker(int[][] boardState) {
-		this.board = boardState;
-	}
-
-	/**
-	 * Updates the stored board for this object to the board input in this method.
-	 * 
-	 * @param newBoard - the new board.
-	 */
-	public void setBoard(int[][] newBoard) {
-		this.board = newBoard;
-	}
 
 	/**
 	 * This checks to see if all of the values in an array are equal.
@@ -54,11 +35,11 @@ public class AiWinChecker {
 	 * 
 	 * @return The value of the check with the given initial row and column.
 	 */
-	public int checkVerticalHeuristic(int row, int column) {
-		int value = this.board[row][column];
-		value = value + this.board[row + 1][column];
-		value = value + this.board[row + 2][column];
-		value = value + this.board[row + 3][column];
+	public static int checkVerticalHeuristic(int row, int column, int[][] board) {
+		int value = board[row][column];
+		value = value + board[row + 1][column];
+		value = value + board[row + 2][column];
+		value = value + board[row + 3][column];
 		if (value == 4 || value == -4) {
 			return (value * 25);
 		}
@@ -76,11 +57,11 @@ public class AiWinChecker {
 	 * 
 	 * @return The value of the check with the given initial row and column.
 	 */
-	public int checkHorizontalHeuristic(int row, int column) {
-		int value = this.board[row][column];
-		value = value + this.board[row][column + 1];
-		value = value + this.board[row][column + 2];
-		value = value + this.board[row][column + 3];
+	public static int checkHorizontalHeuristic(int row, int column, int[][] board) {
+		int value = board[row][column];
+		value = value + board[row][column + 1];
+		value = value + board[row][column + 2];
+		value = value + board[row][column + 3];
 		if (value == 4 || value == -4) {
 			return (value * 25);
 		}
@@ -98,11 +79,11 @@ public class AiWinChecker {
 	 * 
 	 * @return The value of the check with the given initial row and column.
 	 */
-	public int checkDiagonalUpHeuristic(int row, int column) {
-		int value = this.board[row][column];
-		value = value + this.board[row + 1][column - 1];
-		value = value + this.board[row + 2][column - 2];
-		value = value + this.board[row + 3][column - 3];
+	public static int checkDiagonalUpHeuristic(int row, int column, int[][] board) {
+		int value = board[row][column];
+		value = value + board[row + 1][column - 1];
+		value = value + board[row + 2][column - 2];
+		value = value + board[row + 3][column - 3];
 		if (value == 4 || value == -4) {
 			return (value * 25);
 		}
@@ -120,11 +101,11 @@ public class AiWinChecker {
 	 * 
 	 * @return The value of the check with the given initial row and column.
 	 */
-	public int checkDiagonalDownHeuristic(int row, int column) {
-		int value = this.board[row][column];
-		value = value + this.board[row + 1][column + 1];
-		value = value + this.board[row + 2][column + 2];
-		value = value + this.board[row + 3][column + 3];
+	public static int checkDiagonalDownHeuristic(int row, int column, int[][] board) {
+		int value = board[row][column];
+		value = value + board[row + 1][column + 1];
+		value = value + board[row + 2][column + 2];
+		value = value + board[row + 3][column + 3];
 		if (value == 4 || value == -4) {
 			return (value * 25);
 		}
@@ -145,34 +126,33 @@ public class AiWinChecker {
 	 * 
 	 * @return - the integer representing the value of a given board state.
 	 */
-	public int computerheuristic(int[][] testBoard) {
-		this.setBoard(testBoard);
+	public static int computerheuristic(int[][] testBoard) {
 		int compScore = 0;
 		for (int row = 0; row < 6; ++row) {
 			for (int column = 0; column < 7; ++column) {
 				if (row < 3) {
-					int vert = this.checkVerticalHeuristic(row, column);
+					int vert = checkVerticalHeuristic(row, column, testBoard);
 					if (vert == 100 || vert == -100) {
 						return vert;
 					}
 					compScore = compScore + vert;
 				}
 				if (column < 4) {
-					int horiz = this.checkHorizontalHeuristic(row, column);
+					int horiz = checkHorizontalHeuristic(row, column, testBoard);
 					if (horiz == 100 || horiz == -100) {
 						return horiz;
 					}
 					compScore = compScore + horiz;
 				}
 				if (column > 2 && row < 3) {
-					int up = this.checkDiagonalUpHeuristic(row, column);
+					int up = checkDiagonalUpHeuristic(row, column, testBoard);
 					if (up == 100 || up == -100) {
 						return up;
 					}
 					compScore = compScore + up;
 				}
 				if (column < 4 && row < 3) {
-					int down = this.checkDiagonalDownHeuristic(row, column);
+					int down = checkDiagonalDownHeuristic(row, column, testBoard);
 					if (down == 100 || down == -100) {
 						return down;
 					}

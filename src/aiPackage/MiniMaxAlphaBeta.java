@@ -17,8 +17,6 @@ public class MiniMaxAlphaBeta {
 
 	private int[][] board;
 
-	private AiWinChecker winChecker;
-
 	/**
 	 * 
 	 * @param turn       - the current turn count.
@@ -31,9 +29,6 @@ public class MiniMaxAlphaBeta {
 	 * 
 	 * @param board      - the current board-state of the game.
 	 * 
-	 * @param winChecker - provides useful static methods and the heuristic
-	 *                   function.
-	 * 
 	 */
 
 	public MiniMaxAlphaBeta(int compNumber) {
@@ -42,7 +37,6 @@ public class MiniMaxAlphaBeta {
 		this.maxDepth = 0;
 		this.compNumber = compNumber;
 		this.board = new int[6][7];
-		this.winChecker = new AiWinChecker(this.board);
 	}
 
 	/**
@@ -172,7 +166,7 @@ public class MiniMaxAlphaBeta {
 	 * @return - the minimum value found from all leaf nodes below this one.
 	 */
 	public int findMin(int depth, int[][] board, int alpha, int beta) {
-		int evaluation = this.winChecker.computerheuristic(board);
+		int evaluation = AiWinChecker.computerheuristic(board);
 		if (depth == this.maxDepth || evaluation == 100 || evaluation == -100) {
 			return evaluation;
 		}
@@ -227,7 +221,7 @@ public class MiniMaxAlphaBeta {
 	 * @return - the maximum value found from all leaf nodes below this one.
 	 */
 	public int findMax(int depth, int[][] board, int alpha, int beta) {
-		int evaluation = this.winChecker.computerheuristic(board);
+		int evaluation = AiWinChecker.computerheuristic(board);
 		if (depth == this.maxDepth || evaluation == 100 || evaluation == -100) {
 			return evaluation;
 		}
@@ -242,9 +236,7 @@ public class MiniMaxAlphaBeta {
 			if (this.board[0][newMove] == 0) {
 				int row = this.lowestRow(board, newMove);
 				board[row][newMove] = 1;
-				// this.display.updateBoard(1, newMove, row);
 				values[newMove] = this.findMin((depth + 1), board, alpha, beta);
-				// this.display.undoMove(newMove, row);
 				board[row][newMove] = 0;
 				if (values[newMove] < 100000 && values[newMove] > -100000) {
 					alpha = Integer.max(values[newMove], alpha);
